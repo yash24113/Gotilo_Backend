@@ -3,7 +3,26 @@ const fetch = require('node-fetch');
 // Use the Gemini API key from environment variables
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
+// CORS headers for Vercel deployment
+const corsHeaders = {
+  'Access-Control-Allow-Credentials': 'true',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
+  'Access-Control-Allow-Headers': 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+};
+
 module.exports = async (req, res) => {
+  // Handle CORS preflight requests
+  if (req.method === 'OPTIONS') {
+    res.writeHead(200, corsHeaders);
+    return res.end();
+  }
+
+  // Add CORS headers to all responses
+  Object.entries(corsHeaders).forEach(([key, value]) => {
+    res.setHeader(key, value);
+  });
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }

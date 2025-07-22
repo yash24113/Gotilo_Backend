@@ -1,5 +1,19 @@
 {
+  "name": "gotilo-backend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node api/gemini.js",
+    "vercel-build": "echo Building..."
+  },
+  "engines": {
+    "node": "18.x"
+  },
   "dependencies": {
-    "node-fetch": "^2.7.0"
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "node-fetch": "^2.7.0",
+    "react-icons": "^5.5.0"
   }
 }

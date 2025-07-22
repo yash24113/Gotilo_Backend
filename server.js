@@ -4,10 +4,9 @@ const cors = require('cors');
 const fetch = require('node-fetch');
 
 const app = express();
-const PORT = 5000;
 
-// Use the correct Gemini API key
-const GEMINI_API_KEY = "AIzaSyBdoIO45UHeJXMS-ombYEtDCdWo3MFKPHY";
+// Use the Gemini API key from environment variables
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 if (!GEMINI_API_KEY) {
   console.error('GEMINI_API_KEY is not set in environment variables.');
@@ -54,6 +53,5 @@ app.post('/api/gemini', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-}); 
+// Export the Express app as the serverless function handler
+module.exports = app;

@@ -12,16 +12,17 @@ const corsHeaders = {
 };
 
 module.exports = async (req, res) => {
-  // Handle CORS preflight requests
-  if (req.method === 'OPTIONS') {
-    res.writeHead(200, corsHeaders);
-    return res.end();
-  }
+  try {
+    // Handle CORS preflight requests
+    if (req.method === 'OPTIONS') {
+      res.writeHead(200, corsHeaders);
+      return res.end();
+    }
 
-  // Add CORS headers to all responses
-  Object.entries(corsHeaders).forEach(([key, value]) => {
-    res.setHeader(key, value);
-  });
+    // Add CORS headers to all responses
+    Object.entries(corsHeaders).forEach(([key, value]) => {
+      res.setHeader(key, value);
+    });
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -60,6 +61,11 @@ module.exports = async (req, res) => {
       : "Error: No valid response from Gemini API.";
     res.json({ reply });
   } catch (err) {
+    console.error('Server Error:', err);
+    // Add CORS headers even in error responses
+    Object.entries(corsHeaders).forEach(([key, value]) => {
+      res.setHeader(key, value);
+    });
     res.status(500).json({ reply: `Error: Network or server error: ${err.message}` });
   }
 };

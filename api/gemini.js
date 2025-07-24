@@ -4,7 +4,7 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 const corsHeaders = {
   'Access-Control-Allow-Credentials': 'true',
-  'Access-Control-Allow-Origin': '*', // Replace * with specific domain in production for security
+  'Access-Control-Allow-Origin': '*', // Replace with specific domain in production
   'Access-Control-Allow-Methods': 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
   'Access-Control-Allow-Headers': 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
 };
@@ -21,6 +21,16 @@ module.exports = async (req, res) => {
     res.setHeader(key, value);
   });
 
+  // Handle GET requests (for API test)
+  if (req.method === 'GET') {
+    return res.status(200).json({
+      message: 'Gemini Chat API is running ✅',
+      status: 'OK',
+      timestamp: new Date().toISOString(),
+    });
+  }
+
+  // Only allow POST for Gemini chat interaction
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }

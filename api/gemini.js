@@ -45,10 +45,20 @@ module.exports = async (req, res) => {
 
   const modelEndpoint = 'gemini-1.5-flash';
 
-  const contents = messages.map(msg => ({
-    role: msg.role === 'assistant' ? 'model' : 'user',
-    parts: [{ text: msg.content }],
-  }));
+  // const contents = messages.map(msg => ({
+  //   role: msg.role === 'assistant' ? 'model' : 'user',
+  //   parts: [{ text: msg.content }],
+  // }));
+
+  if (!Array.isArray(messages)) {
+  return res.status(400).json({ error: 'Invalid or missing "messages" array in request body.' });
+}
+
+const contents = messages.map(msg => ({
+  role: msg.role === 'assistant' ? 'model' : 'user',
+  parts: [{ text: msg.content }],
+}));
+
 
   try {
     const response = await fetch(
